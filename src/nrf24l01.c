@@ -33,8 +33,6 @@ NRF_RESULT nrf_init(nrf24l01* dev, nrf24l01_config* config) {
     nrf_set_rx_payload_width_p0(dev, dev->config.payload_length);
     nrf_set_rx_payload_width_p1(dev, dev->config.payload_length);
 
-    nrf_set_address_width(dev, dev->config.addr_width);
-
     nrf_set_rx_address_p1(dev, dev->config.rx_address);
     nrf_set_rx_address_p0(dev, dev->config.tx_address);
     nrf_set_tx_address(dev, dev->config.tx_address);
@@ -43,6 +41,7 @@ NRF_RESULT nrf_init(nrf24l01* dev, nrf24l01_config* config) {
     nrf_enable_max_retransmit_irq(dev, 1);
     nrf_enable_crc(dev, 1);
     nrf_set_crc_width(dev, dev->config.crc_width);
+    nrf_set_address_width(dev, dev->config.addr_width);
     nrf_set_rf_channel(dev, dev->config.rf_channel);
     nrf_set_data_rate(dev, dev->config.data_rate);
     nrf_set_retransmittion_count(dev, dev->config.retransmit_count);
@@ -481,7 +480,7 @@ NRF_RESULT nrf_enable_max_retransmit_irq(nrf24l01* dev, bool activate) {
 NRF_RESULT nrf_set_rx_address_p0(nrf24l01* dev, uint8_t* address) {
     uint8_t rx[5];
     if (nrf_send_command(dev, NRF_CMD_W_REGISTER | NRF_RX_ADDR_P0, address, rx,
-    		dev->config.addr_width + 2) != NRF_OK) {
+                         5) != NRF_OK) {
         return NRF_ERROR;
     }
     dev->config.rx_address = address;
@@ -491,7 +490,7 @@ NRF_RESULT nrf_set_rx_address_p0(nrf24l01* dev, uint8_t* address) {
 NRF_RESULT nrf_set_rx_address_p1(nrf24l01* dev, uint8_t* address) {
     uint8_t rx[5];
     if (nrf_send_command(dev, NRF_CMD_W_REGISTER | NRF_RX_ADDR_P1, address, rx,
-    		dev->config.addr_width + 2) != NRF_OK) {
+                         5) != NRF_OK) {
         return NRF_ERROR;
     }
     dev->config.rx_address = address;
@@ -501,7 +500,7 @@ NRF_RESULT nrf_set_rx_address_p1(nrf24l01* dev, uint8_t* address) {
 NRF_RESULT nrf_set_tx_address(nrf24l01* dev, uint8_t* address) {
     uint8_t rx[5];
     if (nrf_send_command(dev, NRF_CMD_W_REGISTER | NRF_TX_ADDR, address, rx,
-    		dev->config.addr_width + 2) != NRF_OK) {
+                         5) != NRF_OK) {
         return NRF_ERROR;
     }
     dev->config.tx_address = address;
